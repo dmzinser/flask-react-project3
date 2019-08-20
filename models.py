@@ -5,9 +5,8 @@ import datetime
 DATABASE = SqliteDatabase('photos.sqlite')
 
 class User(UserMixin, Model):
-  userID = CharField(unique=True)
-  username = CharField(unique=True)
-  email = CharField(unique=True)
+  username = CharField()
+  email = CharField()
   password = CharField()
   image = CharField()
 
