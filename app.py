@@ -1,31 +1,34 @@
 from flask import Flask, g
-# from flask_cors import CORS
-# from flask_login import LoginManager
+from flask_cors import CORS
+from flask_login import LoginManager
 import models
 
-# IMPORT BLUEPRINTS HERE
+from resources.user import user
+from resources.photo import photo
 
 DEBUG = True
 PORT = 8000
 
-# login_manager = LoginManager()
+login_manager = LoginManager()
 
 app = Flask(__name__, static_url_path="", static_folder="static")
 
-# app.secret_key = 'REYKJAVIKING STRING'
+app.secret_key = 'REYKJAVIKING STRING'
 
-# login_manager.init_app(app)
+login_manager.init_app(app)
 
-# @login_manager.user_loader
-# def load_user(userid):
-#   try:
-#     return models.User.get(models.User.id == userid)
-#   except models.DoesNotExist:
-#     return None
+@login_manager.user_loader
+def load_user(userid):
+  try:
+    return models.User.get(models.User.id == userid)
+  except models.DoesNotExist:
+    return None
 
-# SET UP CORS FOR EACH API HERE
+CORS(user, origins=['http://localhost:3000'], supports_credentials=True)
+CORS(photo, origins=['http://localhost:3000'], supports_credentials=True)
 
-# SET UP THE BLUEPRINT FOR EACH API HERE
+app.register_blueprint(user)
+app.register_blueprint(photo)
 
 @app.before_request
 def before_request():
