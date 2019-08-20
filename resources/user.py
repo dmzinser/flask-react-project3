@@ -12,15 +12,21 @@ from playhouse.shortcuts import model_to_dict
 
 user = Blueprint('users', 'user', url_prefix='/user')
 
+@user.route('/<id>/edit', methods=["PUT"])
+def edit_user(id):
+  payload = request.get_json()
+  edit_user_query = models.User.update(**payload).where(models.User.id == id)
+  edit_user_query.execute()
+  edited_user = models.User.get_by_id(id)
+  return jsonify(data=model_to_dict(edited_user), status={"code": 200, "message": "Success"})
+
+
 @user.route('/<id>', methods=["GET"])
-#SHOW ALL USERS
-def show_user(id):
-  try:
-    users = [model_to_dict(user) for user in  models.User.select()]
-    print(users)
-    return jsonify(data=users, status={"code": 200, "message": "Success"})
-  except models.DoesNotExist:
-    return jsonify(data={}, status={"code": 401, "message": "There was an error reading the resource"})
+#NEED TO SET UP SHOW ALL USER PHOTOS NEXT
+def show_one_user(id):
+  user = models.User.get_by_id(id)
+  print(user.__dict__)
+  return jsonify(data=model_to_dict(user), status={"code": 200, "message": "Success"})
 
 @user.route('/login', methods=["POST"])
 def login():
