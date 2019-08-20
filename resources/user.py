@@ -12,6 +12,16 @@ from playhouse.shortcuts import model_to_dict
 
 user = Blueprint('users', 'user', url_prefix='/user')
 
+@user.route('/<id>', methods=["GET"])
+#SHOW ALL USERS
+def show_user(id):
+  try:
+    users = [model_to_dict(user) for user in  models.User.select()]
+    print(users)
+    return jsonify(data=users, status={"code": 200, "message": "Success"})
+  except models.DoesNotExist:
+    return jsonify(data={}, status={"code": 401, "message": "There was an error reading the resource"})
+
 @user.route('/login', methods=["POST"])
 def login():
   payload = request.form.to_dict()
