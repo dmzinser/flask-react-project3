@@ -1,4 +1,4 @@
-from flask import flask, g
+from flask import Flask, g
 from flask_cors import CORS
 from flask_login import LoginManager
 import models
@@ -6,7 +6,7 @@ import models
 # IMPORT BLUEPRINTS HERE
 
 DEBUG = True
-Port = 8000
+PORT = 8000
 
 login_manager = LoginManager()
 
