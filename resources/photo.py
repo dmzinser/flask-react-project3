@@ -6,6 +6,14 @@ from PIL import Image
 
 photo = Blueprint('photos', 'photo', url_prefix='/photos')
 
+@photo.route('', methods=["GET"])
+def show_all_photos():
+  try:
+    photos = [model_to_dict(photo) for photo in models.Photo.select()]
+    return jsonify(data=photos, status={"code": 200, "message": "Success"})
+  except models.DoesNotExist:
+    return jsonify(data={}, status={"code": 401, "message": " There was an error getting the resource"})
+
 @photo.route('/<id>', methods=["DELETE"])
 def delete_photo(id):
   delete_photo_query = models.Photo.delete().where(models.Photo.id == id)
