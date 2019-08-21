@@ -73,22 +73,22 @@ def save_picture(form_picture):
 
 @user.route('/signup', methods=["POST"])
 def signup():
-  # pay_file = request.files
+  pay_file = request.files
   payload = request.form.to_dict()
-  # dict_file = pay_file.to_dict()
+  dict_file = pay_file.to_dict()
   print(payload, "<=== THIS IS THE SIGNUP PAYLOAD")
-  # print(dict_file, "<== THIS IS THE SIGNUP DICT_FILE")
+  print(dict_file, "<== THIS IS THE SIGNUP DICT_FILE")
   payload['email'].lower()
   try:
     models.User.get(models.User.email == payload['email'])
     return jsonify(data={}, status={"code": 401, "message": "A User with that name or email already exists"})
   except models.DoesNotExist:
     payload['password'] = generate_password_hash(payload['password'])
-    # file_picture_path = save_picture(dict_file['file'])
-    # payload['image'] = file_picture_path
+    file_picture_path = save_picture(dict_file['file'])
+    payload['image'] = file_picture_path
     user = models.User.create(**payload)
     login_user(user)
-    # current_user.image = file_picture_path
+    current_user.image = file_picture_path
     user_dict = model_to_dict(user)
     print(user_dict)
     print(type(user_dict))
