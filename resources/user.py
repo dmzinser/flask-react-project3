@@ -12,6 +12,12 @@ from playhouse.shortcuts import model_to_dict
 
 user = Blueprint('users', 'user', url_prefix='/user')
 
+@user.route('/<id>', methods=["DELETE"])
+def delete_user(id):
+  delete_user_query = models.User.delete().where(models.User.id == id)
+  delete_user_query.execute()
+  return jsonify(data='resource successfully deleted', status={"code": 200, "message": "resource deleted successfully"})
+
 @user.route('/<id>/edit', methods=["PUT"])
 def edit_user(id):
   payload = request.get_json()
@@ -19,7 +25,6 @@ def edit_user(id):
   edit_user_query.execute()
   edited_user = models.User.get_by_id(id)
   return jsonify(data=model_to_dict(edited_user), status={"code": 200, "message": "Success"})
-
 
 @user.route('/<id>', methods=["GET"])
 #NEED TO SET UP SHOW ALL USER PHOTOS NEXT

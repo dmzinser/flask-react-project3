@@ -19,6 +19,7 @@ class Photo(Model):
   longitude = CharField()
   latitude = CharField()
   file_location = CharField()
+  user = ForeignKeyField(User, backref='photos')
   
   class Meta:
     database = DATABASE
