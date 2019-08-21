@@ -26,8 +26,17 @@ def edit_user(id):
   edited_user = models.User.get_by_id(id)
   return jsonify(data=model_to_dict(edited_user), status={"code": 200, "message": "Success"})
 
+@user.route('/<id>/photos', methods=["GET"])
+def show_all_user_photos(id):
+  user = models.User.get_by_id(id)
+  photos = [model_to_dict(photo) for photo in user.photos]
+  def delete_key(item, key):
+    del item[key]
+    return item
+  photo_without_user = [delete_key(photo, 'user') for photo in photos]
+  return jsonify(data=photo_without_user, status={"code": 200, "message": "Success"})
+
 @user.route('/<id>', methods=["GET"])
-#NEED TO SET UP SHOW ALL USER PHOTOS NEXT
 def show_one_user(id):
   user = models.User.get_by_id(id)
   print(user.__dict__)
