@@ -34,12 +34,25 @@ def show_one_photo(id):
   print(photo.__dict__, "<== THIS IS THE PHOTO DICT IN THE SHOW ROUTE")
   return jsonify(data=model_to_dict(photo), status={"code": 200, "message": "Success"})
 
-@photo.route('/addphoto', methods=["POST"])
-def add_photo():
-  payload = request.get_json()
-  print(payload, '<== THIS IS THE ADD PHOTO PAYLOAD')
-  print(current_user.get_id())
-  payload['user'] = current_user.get_id()
-  photo = models.Photo.create(**payload)
-  photo_dict = model_to_dict(photo)
-  return jsonify(data=photo_dict, status={"code": 201, "message": "Success"})
+def save_picture(form_picture):
+  random_hex = secrets.token_hex(8)
+  f_name, f_ext = os.path.splitext(form_picture.filename)
+  picture_name = random_hex + f_ext
+  file_path_for_avatar = os.path.join(os.getcwd(), 'static/photo_uploads/' + picture_name)
+  
+  output_size = (250, 250)
+  i = Image.open(form_picture)
+  i.thumbnail(output_size)
+  i.save(file_path_for_avatar)
+  return picture_name
+
+# @photo.route('/addphoto', methods=["POST"])
+# def add_photo():
+#   # HOW DO I SAVE A JSON IMAGE FILE?
+#   payload = request.get_json()
+#   print(payload, '<== THIS IS THE ADD PHOTO PAYLOAD')
+#   print(current_user.get_id())
+#   payload['user'] = current_user.get_id()
+#   photo = models.Photo.create(**payload)
+#   photo_dict = model_to_dict(photo)
+#   return jsonify(data=photo_dict, status={"code": 201, "message": "Success"})
