@@ -25,8 +25,8 @@ def load_user(userid):
   except models.DoesNotExist:
     return None
 
-CORS(user, origins=['http://localhost:3000'], supports_credentials=True)
-CORS(photo, origins=['http://localhost:3000'], supports_credentials=True)
+CORS(user, origins=['http://localhost:3000', 'https://fierce-brook-99190-react.herokuapp.com'], supports_credentials=True)
+CORS(photo, origins=['http://localhost:3000', 'https://fierce-brook-99190-react.herokuapp.com'], supports_credentials=True)
 
 app.register_blueprint(user)
 app.register_blueprint(photo)
