@@ -7,7 +7,7 @@ from PIL import Image
 
 from flask import Blueprint, request, jsonify, url_for, send_file
 from flask_bcrypt import generate_password_hash, check_password_hash
-from flask_login import login_user, current_user
+from flask_login import login_user, current_user, logout_user
 from playhouse.shortcuts import model_to_dict
 
 user = Blueprint('users', 'user', url_prefix='/user')
@@ -17,6 +17,11 @@ def delete_user(id):
   delete_user_query = models.User.delete().where(models.User.id == id)
   delete_user_query.execute()
   return jsonify(data='resource successfully deleted', status={"code": 200, "message": "resource deleted successfully"})
+
+@user.route('/logout', methods=["GET"])
+def logout():
+  logout_user()
+  return jsonify(status={"code": 200, "message": "User Successfully Logged Out"})
 
 @user.route('/<id>/edit', methods=["PUT"])
 def edit_user(id):
