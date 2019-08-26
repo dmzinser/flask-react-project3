@@ -114,16 +114,19 @@ def add_photo(id):
   payload = request.form.to_dict()
   print(payload, '<== THIS IS THE PAYLOAD')
   dict_file = pay_file.to_dict()
-  # ADD TRY HERE
   print(dict_file, '<== THIS IS THE ADD PHOTO PAYLOAD')
   print(current_user.get_id(), '<== THIS IS THE CURRENT_USER')
   print(pay_file, '<== THIS IS THE PAY_FILE')
   file_picture_path = save_photo_upload(dict_file['file_location'])
-
-  # photo = models.Photo.create(title= 'hhello', description='sdf', longitude='d', latitude='adsfsad', file_location=file_picture_path , user_id=1)
   payload['file_location'] = file_picture_path
   payload['user'] = id
   photo = models.Photo.create(**payload)
   photo_dict = model_to_dict(photo)
   print(photo_dict, '<== THIS IS THE PHOTO_DICT')
   return jsonify(data=photo_dict, status={"code": 201, "message": "Success"})
+
+@user.route('/<id>/photos', methods=["DELETE"])
+def delete_photo(id):
+  delete_photo_query = models.Photo.delete().where(models.Photo.id == id)
+  delete_photo_query.execute()
+  return jsonify(data='resource successfully deleted', status={"code": 200, "message": "resource deleted successfully"})

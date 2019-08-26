@@ -20,7 +20,7 @@ def delete_photo(id):
   delete_photo_query.execute()
   return jsonify(data='resource successfully deleted', status={"code": 200, "message": "resource deleted successfully"})
 
-@photo.route('/<id>', methods=["PUT"])
+@photo.route('/<id>/edit', methods=["PUT"])
 def edit_photo(id):
   payload = request.get_json()
   edit_photo_query = models.Photo.update(**payload).where(models.Photo.id == id)
