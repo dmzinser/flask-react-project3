@@ -101,34 +101,34 @@ def signup():
     del user_dict['password']
     return jsonify(data=user_dict, status={"code": 201, "message": "Success"})
 
-def save_photo_upload(form_picture):
-  random_hex = secrets.token_hex(8)
-  f_name, f_ext = os.path.splitext(form_picture.filename)
-  picture_name = random_hex + f_ext
-  file_path_for_avatar = os.path.join(os.getcwd(), 'static/photo_uploads/' + picture_name)
+# def save_photo_upload(form_picture):
+#   random_hex = secrets.token_hex(8)
+#   f_name, f_ext = os.path.splitext(form_picture.filename)
+#   picture_name = random_hex + f_ext
+#   file_path_for_avatar = os.path.join(os.getcwd(), 'static/photo_uploads/' + picture_name)
   
-  output_size = (250, 250)
-  i = Image.open(form_picture)
-  i.thumbnail(output_size)
-  i.save(file_path_for_avatar)
-  return picture_name
+#   output_size = (250, 250)
+#   i = Image.open(form_picture)
+#   i.thumbnail(output_size)
+#   i.save(file_path_for_avatar)
+#   return picture_name
 
-@user.route('/<id>/photos', methods=["POST"])
-def add_photo(id):
-  pay_file = request.files
-  payload = request.form.to_dict()
-  print(payload, '<== THIS IS THE PAYLOAD')
-  dict_file = pay_file.to_dict()
-  print(dict_file, '<== THIS IS THE ADD PHOTO PAYLOAD')
-  print(current_user.get_id(), '<== THIS IS THE CURRENT_USER')
-  print(pay_file, '<== THIS IS THE PAY_FILE')
-  file_picture_path = save_photo_upload(dict_file['file_location'])
-  payload['file_location'] = file_picture_path
-  payload['user'] = id
-  photo = models.Photo.create(**payload)
-  photo_dict = model_to_dict(photo)
-  print(photo_dict, '<== THIS IS THE PHOTO_DICT')
-  return jsonify(data=photo_dict, status={"code": 201, "message": "Success"})
+# @user.route('/<id>/photos', methods=["POST"])
+# def add_photo(id):
+#   pay_file = request.files
+#   payload = request.form.to_dict()
+#   print(payload, '<== THIS IS THE PAYLOAD')
+#   dict_file = pay_file.to_dict()
+#   print(dict_file, '<== THIS IS THE ADD PHOTO PAYLOAD')
+#   print(current_user.get_id(), '<== THIS IS THE CURRENT_USER')
+#   print(pay_file, '<== THIS IS THE PAY_FILE')
+#   file_picture_path = save_photo_upload(dict_file['file_location'])
+#   payload['file_location'] = file_picture_path
+#   payload['user'] = id
+#   photo = models.Photo.create(**payload)
+#   photo_dict = model_to_dict(photo)
+#   print(photo_dict, '<== THIS IS THE PHOTO_DICT')
+#   return jsonify(data=photo_dict, status={"code": 201, "message": "Success"})
 
 @user.route('/<id>/photos', methods=["DELETE"])
 def delete_photo(id):
